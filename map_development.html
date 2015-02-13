@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Keyspots Map - Development</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+	<script type="text/json" src="keyspots_addresses_with_justicemap.json"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3"></script>
+	<style type="text/css">
+	  html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+   #info-box {
+      background-color: white;
+      border: 1px solid black;
+      bottom: 30px;
+      height: 20px;
+      padding: 10px;
+      position: absolute;
+      right: 30px;
+      top: 10px;
+    }
+    #table {
+    	position: absolute;
+    	left: 0px;
+    	top: 10px;
+    	height: 500px;
+    	z-index: 5;
+    }
+    </style>	
+
+    <script>
+	function initialize() {
+		var JSON;
+		$.getJSON ("https://dl.dropboxusercontent.com/u/68432285/keyspots_addresses_with_justicemap.json", function(response){
+//			console.log("getJSON fired");
+			JSON = response;
+			buildTable(JSON);
+		}).com;
+;
+
+
+		function mapIt ()  {
+//			console.log("mapit fired");
+			var phila = new google.maps.LatLng(40,-75.624207);
+			var mapOptions = {
+				zoom: 12,
+				legend: true
+			}
+
+			var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+			var censusTractLayer = new google.maps.KmlLayer({
+				url: 'http://www.maptile.org/tile/kml/income/42/101.kmz '
+			});
+
+			map.data.loadGeoJson("https://dl.dropboxusercontent.com/u/68432285/keyspots_addresses_with_justicemap.json");
+			censusTractLayer.setMap(map);
+
+
+			map.data.addListener('mouseover', function(event) {
+				var income = event.feature.k.JusticeMap.income;
+				var censusTract = event.feature.k.JusticeMap.name10;
+				var organizationName = event.feature.k.organization;
+				var print = "Name: \n" + organizationName + "\nIncome: \n" + income + "\nCensus Tract \n" + censusTract;
+
+			document.getElementById('info-box').textContent =
+			    print;
+
+			});
+		}
+		function buildTable(JSON) {
+//			console.log("buildTable fired");
+console.log(JSON);
+            var table = ['<table class="table table-striped"><thead>'];
+            
+
+			for (var i = 0; i < JSON.features.length; i++) {
+				table.push('<tr class="' + i + '">');
+				table.push('<td>' +  JSON.features[i].properties.organization + '</td>');
+				table.push('<td>' + JSON.features[i].properties.JusticeMap.income + '</td>')
+			}
+            table.push('</tbody></table>');
+            document.getElementById('table').innerHTML = table.join('');
+		}
+		mapIt();
+
+
+
+		
+
+		
+
+
+
+
+		}
+
+		google.maps.event.addDomListener(window, 'load', initialize);
+	</script>
+	<body onload="initialize()">
+		<div id="table"></div>
+	    <div id="map-canvas"></div>
+	          <div id="info-box">?</div>
+				<div id="legend" style="padding: 7px; width: 190px; z-index: 0; position: absolute; bottom: 26px; right: 0px; background: rgb(255, 255, 255);" title="Median Household Income">Income<div style="color:red; float:right; margin-top:-5px; margin-left:8px; padding-bottom:10px;">
+
+				<span id="color_0" style="background:#67001f; width:10px; height:10px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				<span style="background:#fff;"> $0 - 28,000</span></div><div style="padding:2px;">
+				<span id="color_1" style="background:#b2182b; width:10px; height:10px;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="background:#fff;"> $28,000 - 35,000</span></div><div style="padding:2px;"><span id="color_2" style="background:#d6604d; width:10px; height:10px;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="background:#fff;"> $35,000 - 40,000</span></div><div style="padding:2px;"><span id="color_3" style="background:#f4a582; width:10px; height:10px;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="background:#fff;"> $40,000 - 45,000</span></div><div style="padding:2px;"><span id="color_4" style="background:#fddbc7; width:10px; height:10px;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="background:#fff;"> $45,000 - 51,000</span></div><div style="padding:2px;"><span id="color_5" style="background:#d1e5f0; width:10px; height:10px;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="background:#fff;"> $51,000 - 56,000</span></div><div style="padding:2px;"><span id="color_6" style="background:#92c5de; width:10px; height:10px;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="background:#fff;"> $56,000 - 64,000</span></div><div style="padding:2px;"><span id="color_7" style="background:#4393c3; width:10px; height:10px;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="background:#fff;"> $64,000 - 75,000</span></div><div style="padding:2px;"><span id="color_8" style="background:#2166ac; width:10px; height:10px;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="background:#fff;"> $75,000 - 93,000</span></div><div style="padding:2px;"><span id="color_9" style="background:#053061; width:10px; height:10px;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="background:#fff;"> $93,000 - and more</span>
+				</div>
+			</div>
+  </body>
+</html?

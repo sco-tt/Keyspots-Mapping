@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Justice Map API</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <script type="text/javascript" src="keyspots_addresses.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>
+    var sites;
+
+    function initialize() {
+ 	var final = []
+	var urls = [];	
+	var count = 0;
+	var numSites =  sites.features.length;
+
+	for (var i = 0; i < numSites; i++) {
+		var organizaton = sites.features[i].properties.organization;
+		var lat = sites.features[i].geometry.coordinates[1];
+		var lng = sites.features[i].geometry.coordinates[0];
+//			var url = "http://data.fcc.gov/api/block/find?format=jsonp&latitude=" + lat + "&longitude=" + lng + "&showall=false";
+		var url = "http://www.justicemap-api.org/api.php?fLat=" + lat + "&fLon=" + lng + "&sGeo=tract";
+		urls.push(url);
+	}
+
+	(function () {
+		var chain = $.Deferred(); // Create the root of the chain.
+		var promise = chain; // Placeholder for the promise
+
+		jQuery.each(urls,function(index,elem){
+		    // Pipe the response to the "next" function
+		    promise = promise.pipe(function(response)
+		    {
+		        var myurl = elem; // Get the current part
+		        var newPromise = $.Deferred();
+				$.ajax({
+					url: myurl, 
+					dataType: 'html', 
+		        }).done(function(justiceMapApiData){  
+		          //these are your normal ajax success function params, IIRC
+		           //do stuff with response
+		           count++;
+			       buildArray(JSON.parse(justiceMapApiData));
+				}).fail(function(){
+		           //oops, it failed, oh well
+		           //do stuff on failure 
+		           console.log("failed");
+		        }).always(function() {
+		           //but always resolve the sequencing promise
+		           newPromise.resolve();            
+		        });
+		        return newPromise;
+		    })
+		});
+		chain.resolve();
+	})();	
+
+	function buildArray (justiceMapApiData, sites) {
+		final.push(justiceMapApiData);
+		if (count == numSites) {
+			combine(final);
+		}
+	}
+	function combine (final) {
+		for (var i = 0; i < numSites; i++) {
+			var spot = sites.features[i].properties;
+			var justiceMapObj = final[i];
+			spot.JusticeMap = justiceMapObj;
+			console.log(spot);
+		}
+		console.log(JSON.stringify(sites));
+	}
+}
+     </script>
+    </head>
+
+    <body onload="initialize()">
+    <div id="output"></div>
+	</body>
+</html>

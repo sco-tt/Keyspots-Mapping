@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Data Layer: Event Handling</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <script type="text/javascript" src="keyspots_addresses.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>
+    var sites;
+    function initialize() {
+        var output = document.getElementById('output');
+		var urls = [];	
+			for (var i = 0; i < sites.features.length; i++) {
+			var lat = sites.features[i].geometry.coordinates[1];
+			var lng = sites.features[i].geometry.coordinates[0];
+			var url = "http://data.fcc.gov/api/block/find?format=jsonp&latitude=" + lat + "&longitude=" + lng + "&showall=false";
+				urls.push(url);
+//			console.log(urls);
+
+			function loop(i, onDone){
+			    if(i >= urls.length){
+			        //base case
+			        onDone( theResultOfProcessingTheAjaxRequests );
+			    }else{
+			        Ajax.Request(urls[i], {
+			            onsuccess: function(data){
+      			          	var block = data.Block.FIPS;
+      			          	console.log(block);
+			                loop(i+1, onDone);
+			            }
+			        });
+			    }
+}
+
+           
+          /**  var dataElement = document.createElement('div');
+			var organizaton = sites.features[i].properties.organization;
+			var orgHolder = document.createElement('p');
+			orgHolder.innerHTML = organizaton;
+			dataElement.appendChild(orgHolder);
+
+			var blockHolder = document.createElement('p');
+
+			var features = sites.features;
+
+			
+			$.ajax({
+				url: url, 
+				dataType: 'jsonp',
+				async: 'false',
+		          success: function (data) {
+		          	var block = data.Block.FIPS;
+		          	console.log(i);
+		          	blockHolder.innerHTML = block;
+		          	dataElement.appendChild(blockHolder);
+					}
+			})
+
+			output.appendChild(dataElement);
+		} **/
+	}
+}
+     </script>
+    </head>
+
+    <body onload="initialize()">
+    <div id="output"></div>
+	</body>
+</html>
