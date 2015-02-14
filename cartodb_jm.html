@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Justice Map API</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>
+    
+   (function () {
+	   "use strict"; 
+	   var account_name = 'philakeyspots';
+	    function getCount () {
+	    //CartoDB sql vars
+	   // var sql_statement = "SELECT cartodb_id, organization,site_address,ST_AsGeoJSON(the_geom) as the_geom FROM table_2014_q1";   
+	    var sql_statement = "SELECT count(*) FROM table_2014_q1";
+	    console.log("queryCartoDB fired");
+	    $.getJSON('http://'+account_name+'.cartodb.com/api/v2/sql/?q='+sql_statement, function(data) {
+	      $.each(data.rows, function(key, val) {
+	      });
+	    }).done(function(data) {
+	    	var count = data.rows[0].count
+	        queryCartoDB(count);
+	      });
+	    }
+
+	    function queryCartoDB(count) {
+	    	var toJM = [ [],[] ];
+	    	for (var i = 1; i <= count; i++) {
+	    		var cartodb_id = i;
+	    		var sql_statement = "SELECT cartodb_id,organization,site_address,ST_AsGeoJSON(the_geom) as the_geom FROM table_2014_q1 WHERE cartodb_id = '" + cartodb_id + "'";
+				$.getJSON('http://'+account_name+'.cartodb.com/api/v2/sql/?q='+sql_statement, function(data) {
+					$.each(data.rows, function(key, val) {
+					});
+				}).done(function(data) {
+					var returned_id = data.rows[0].cartodb_id;
+					var geom = JSON.parse(data.rows[0].the_geom);
+					var lng = geom.coordinates[0];
+					var lat = geom.coordinates[1];
+					queryJM(returned_id, "http://www.justicemap-api.org/api.php?fLat=" + lat + "&fLon=" + lng + "&sGeo=tract");
+
+				});
+		    }
+    	}
+    	function queryJM (returned_id, queryURL) {
+			$.ajax({
+				url: queryURL, 
+				dataType: 'html', 
+		        }).done(function(justiceMapApiData){  
+		          console.log(JSON.parse(justiceMapApiData));
+				})
+    	}
+	    getCount();	    
+	})()
+     </script>
+    </head>
+
+    <div id="output"></div>
+	</body>
+</html>
