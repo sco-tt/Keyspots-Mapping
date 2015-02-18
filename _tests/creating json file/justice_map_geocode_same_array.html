@@ -7,10 +7,11 @@
     <script type="text/javascript" src="keyspots_addresses.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script>
+    
     var sites;
 
     function initialize() {
- 	var final = []
+ 	var final = [];
 	var urls = [];	
 	var count = 0;
 	var numSites =  sites.features.length;
@@ -56,22 +57,33 @@
 		chain.resolve();
 	})();	
 
-	function buildArray (justiceMapApiData, sites) {
-		final.push(justiceMapApiData);
+	function buildArray (justiceMapApiData) {
+		var output = sites;
+		var spot = output.features[count];
+
+		
+		
+		for (var attrname in justiceMapApiData) {
+			
+			spot.properties[attrname] = justiceMapApiData[attrname];
+	}
+
 		if (count == numSites) {
+			console.log(output);
 			combine(final);
 		}
+
 	}
+
+
+	
+	
+
 	function combine (final) {
-		for (var i = 0; i < numSites; i++) {
-			var spot = sites.features[i].properties;
-			var justiceMapObj = final[i];
-			spot.JusticeMap = justiceMapObj;
-			console.log(spot);
-		}
-		console.log(JSON.stringify(sites));
+		console.log(final);
 	}
 }
+initialize();
      </script>
     </head>
 
