@@ -85,7 +85,7 @@ function flatten_arrays(jmData, rowData){
 }
 
 function writeTable (output) {
-	    $('#example').dataTable( {
+	    $("#example").dataTable( {
 	        data: output,
 	        paging: false,
 	        "columns": [
@@ -101,7 +101,8 @@ function writeTable (output) {
 	            
 	            // Justice Income/Pop Data 
 	            { data: "income" },
-	            { data: "pop" },	           
+	            { data: "pop" },	
+
 				// Justice Race Data
 	            { data: "asian" },
 	            { data: "black" },
