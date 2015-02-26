@@ -9,6 +9,25 @@ table {
 
 #carto-map { height: 500px; }
 
+.hover-result-hide {
+  opacity: 0;
+  display: none;
+   -webkit-transition: opacity 500ms ease-out 1s;
+    -moz-transition: opacity 500ms ease-out 1s;
+    -o-transition: opacity 500ms ease-out 1s;
+    transition: opacity 500ms ease-out 1s;
+}
+
+
+#hover-result tr {
+  height: 5em;
+}
+#hover-result_filter {
+  display: none;
+}
+
+
+
 
 //Spinner
 

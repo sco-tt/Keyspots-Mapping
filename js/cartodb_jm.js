@@ -2,6 +2,7 @@ $(document).ready(function() {
 
 "use strict"; 
 var output = [];
+var table;
 
 /** 
 *** Carto DB Account Details
@@ -35,8 +36,11 @@ function queryJusticeMap (rowData, i) {
 		jmData.income = jmData.income.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 		//Mapping
+		/**
+
 		L.marker([rowData.lat, rowData.lng]).addTo(map)
 			.bindPopup("<b>" + rowData.organization + "</b><br />Income: $"+jmData.income).openPopup();
+		**/
 
 		//Send Data to Chart
 		flatten_arrays(jmData, rowData);
@@ -79,15 +83,19 @@ function flatten_arrays(jmData, rowData){
 
 	//Check that everything has been formatted
 	if (numRows === count) {
-	    	writeTable (output);
+			//Make it twice http://datatables.net/manual/tech-notes/3
+	    	writeTable ("#example",output, true);
+	    	writeTable ("#hover-result",output, false);
 	    }
 	    else {}
 }
 
-function writeTable (output) {
-	    $("#example").dataTable( {
+function writeTable (id, output, sortBoolean) {
+	    $(id).dataTable( {
 	        data: output,
-	        paging: false,
+	        paging: false,        
+	        info:false,
+	        sort:sortBoolean,
 	        "columns": [
 	            // CartoDB Data First
 	            
@@ -115,10 +123,52 @@ function writeTable (output) {
 
 	        ]
 	    } );   
-
+ 
 }
 
+/**CartDB Viz **/
 
+function main() {
+        cartodb.createVis('carto-map', 'http://philakeyspots.cartodb.com/api/v2/viz/75f8c996-b86f-11e4-92ef-0e4fddd5de28/viz.json', {
+            shareable: false,
+            title: false,
+            description: true,
+            search: false,
+            tiles_loader: true,
+            fullscreen: false,
+            legend: true,
+            center_lat: 40,
+            center_lon: -75.15,
+            zoom: 12
+        })
+        .done(function(vis, layers) {
+          // layer 0 is the base layer, layer 1 is cartodb layer
+          // setInteraction is disabled by default
+          layers[1].setInteraction(true);
+          layers[1].on('featureOver', function(e, pos, latlng, data) {
+            //cartodb.log.log(e, pos, latlng, data);
+            search(data);
+            
+          });
+          // you can get the native map to work with it
+          var map = vis.getNativeMap();
+          // now, perform any operations you need
+          // map.setZoom(3);
+          // map.panTo([50.5, 30.5]);
+        })
+        .error(function(err) {
+          console.log(err);
+        });
+      }
+
+  function search(data) {
+  	var table = $('#hover-result').DataTable();
+    if (data.organization) {
+      $('#hover-result').removeClass('hover-result-hide');
+      table.search(data.organization).draw();
+    }
+  }
+main();
 getCount();
 
 })(jQuery);   
