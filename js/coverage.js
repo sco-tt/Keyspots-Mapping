@@ -1,5 +1,5 @@
  function main() {
-        cartodb.createVis('carto-map', 'http://philakeyspots.cartodb.com/api/v2/viz/75f8c996-b86f-11e4-92ef-0e4fddd5de28/viz.json', {
+        cartodb.createVis('carto-map', 'http://philakeyspots.cartodb.com/api/v2/viz/eb0d43cc-becf-11e4-9d15-0e0c41326911/viz.json', {
             shareable: false,
             title: false,
             description: true,

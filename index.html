@@ -15,7 +15,6 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" type="text/css" href="css/custom.css">
     <!-- CartoJS -->
-    <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.js"></script>
     <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.11/themes/css/cartodb.css" />
     
 
@@ -43,53 +42,23 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="#census-data">Census Data</a></li>
-        <li><a href="#map-view">Map</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-            <li class="divider"></li>
-            <li><a href="#">One more separated link</a></li>
-          </ul>
-        </li>
+        <li><a href="/index.html">Census Data</a></li>
+        <li><a href="/coverage.html">Keyspot Coverage</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+    <div class="container">
+        <h1>Keyspots Census Data</h1>
+        <p>Combing Keyspots Data with the Justice Map Api displaying demographic information based on the 2010 census</p>
+    </div>  
+     <!-- <table id="hover-result" class="display hover-result-hide" cellspacing="0" width="100%">-->
+    <div class="map-container">
+        <div id="single-income"><h4>Hover over Keyspot for income data</h4></div>
+        <div id="carto-map"></div>
+</div>
 <div class="container" role="main">  
-    <div><h1>Mashing up Justice Map and Cartodb</h1>
-    <p>Combing Keyspots Data with the Justice Map Api displaying demographic information based on the census</p>
 
-    <h2>Map</h2>
-    <p>Click for more information</p>
-    </div>   
-      <table id="hover-result" class="display hover-result-hide" cellspacing="0" width="100%">
-        <thead>
-            <tr>            
-                <td>organization</td>
-                <td>site_address</td>
-                <td>site_type</td>
-                <td>region</td>
-                <!-- Justice Income/Pop Data -->                       
-                <td>income</td>
-                <td>Population</td>
-                <!-- Justice Race Data -->                       
-                <td>asian</td>
-                <td>black</td>
-                <td>hispanic</td>
-                <td>indian</td>
-                <td>island</td>
-                <td>multi</td>
-                <td>white</td>
-            </tr>
-        </thead>
-        </table>
-    <div id="carto-map"></div>
     <div id="census-data">
     <h2>Data</h2>
     <p>Demographic data based on census to specificity of census tract. Use search field to filter results.</p>
@@ -103,6 +72,7 @@
                 <td>region</td>
                 <!-- Justice Income/Pop Data -->                       
                 <td>income</td>
+                <td>quintile</td>
                 <td>Population</td>
                 <!-- Justice Race Data -->                       
                 <td>asian</td>
@@ -122,6 +92,7 @@
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.js"></script>
     <script type="text/javascript" src="js/cartodb_jm.js"></script>
 <!--    <script type="text/javascript" src="js/cartojs_map.js"></script> -->
 

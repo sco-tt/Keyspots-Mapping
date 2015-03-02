@@ -7,24 +7,24 @@ table {
 
 #map { height: 480px; }
 
-#carto-map { height: 500px; }
-
-.hover-result-hide {
-  opacity: 0;
-  display: none;
-   -webkit-transition: opacity 500ms ease-out 1s;
-    -moz-transition: opacity 500ms ease-out 1s;
-    -o-transition: opacity 500ms ease-out 1s;
-    transition: opacity 500ms ease-out 1s;
-}
+#carto-map { height: 500px;
+width: 100%; }
 
 
-#hover-result tr {
-  height: 5em;
+.map-container {
+  position: relative;
 }
-#hover-result_filter {
-  display: none;
+
+#single-income {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  width: 100%;
+  background: rgba(26,26,26,.7);
+  color: white;
+  text-align: center;
 }
+
 
 
 

@@ -8,7 +8,7 @@ var table;
 *** Carto DB Account Details
 **/
 var account_name = "philakeyspots";
-var table = "keyspots";
+var table = "keyspots_locations";
 var count = 1;
 var data;
 var numRows;
@@ -33,18 +33,29 @@ function queryJusticeMap (rowData, i) {
 	var lng = rowData.lng;
 	$.getJSON("http://www.justicemap-api.org/api.php?fLat=" + lat + "&fLon=" + lng + "&sGeo=tract", function( jmData ) {
 	}).done(function(jmData) {
+		var quntile;
+		if (jmData.income >= 0 && jmData.income < 20260) {
+			quntile = 1;
+		} else
+		if (jmData.income >= 20260 && jmData.income < 38515) {
+			quntile = 2; 
+		} else
+		if (jmData.income >= 38515 && jmData.income < 62434) {
+			quntile = 3;
+		} else
+		if (jmData.income >= 62434 && jmData.income < 101577) {
+			quntile = 4;
+		} else
+		if (jmData.income >= 101577) {
+			quntile = 5;
+		} else {
+
+		}
+		jmData['quintile'] = quntile;
 		jmData.income = jmData.income.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-		//Mapping
-		/**
-
-		L.marker([rowData.lat, rowData.lng]).addTo(map)
-			.bindPopup("<b>" + rowData.organization + "</b><br />Income: $"+jmData.income).openPopup();
-		**/
-
+		console.log(jmData);
 		//Send Data to Chart
 		flatten_arrays(jmData, rowData);
-
 	});
 }
 
@@ -52,13 +63,9 @@ function queryJusticeMap (rowData, i) {
 *** Data cleaning happens here
 **/
 
-
-
 function flatten_arrays(jmData, rowData){
-
     //Clean up
     rowData.site_address = rowData.site_address.replace("Philadelphia PA", "");
-	
 	//Delete
 	delete jmData.sClient;
 	delete jmData.iExit;
@@ -67,7 +74,6 @@ function flatten_arrays(jmData, rowData){
 	delete rowData.lat;
 	delete rowData.lng;
 	delete rowData.cartodb_id;
-
 	//Merge
 	var fullSiteData = {};
 	for (var attrname in rowData) {
@@ -77,15 +83,12 @@ function flatten_arrays(jmData, rowData){
 		fullSiteData[attrname] = jmData[attrname];
 	}
 	output.push(fullSiteData);
-	
 	//Now that everything has been formatted sucessfully, increment the count
 	count++;
-
 	//Check that everything has been formatted
 	if (numRows === count) {
-			//Make it twice http://datatables.net/manual/tech-notes/3
+		console.log(output);
 	    	writeTable ("#example",output, true);
-	    	writeTable ("#hover-result",output, false);
 	    }
 	    else {}
 }
@@ -97,20 +100,18 @@ function writeTable (id, output, sortBoolean) {
 	        info:false,
 	        sort:sortBoolean,
 	        "columns": [
-	            // CartoDB Data First
-	            
-	            
+	            // CartoDB Data First 
 	            // CartoDB id forDebuggin
 	            // { data: "cartodb_id" },
 	            { data: "organization" },
 	            { data: "site_address" },
 	            { data: "site_type" },
-	            { data: "region" },
-	            
+	            { data: "region" }, 
 	            // Justice Income/Pop Data 
 	            { data: "income" },
-	            { data: "pop" },	
+	            { data: "quintile" },
 
+	            { data: "pop" },	
 				// Justice Race Data
 	            { data: "asian" },
 	            { data: "black" },
@@ -119,11 +120,8 @@ function writeTable (id, output, sortBoolean) {
 	            { data: "island" },
 	            { data: "multi"},
 	            { data: "white"  },
-
-
 	        ]
 	    } );   
- 
 }
 
 /**CartDB Viz **/
@@ -146,7 +144,7 @@ function main() {
           // setInteraction is disabled by default
           layers[1].setInteraction(true);
           layers[1].on('featureOver', function(e, pos, latlng, data) {
-            //cartodb.log.log(e, pos, latlng, data);
+            cartodb.log.log(e, pos, latlng, data);
             search(data);
             
           });
@@ -162,10 +160,16 @@ function main() {
       }
 
   function search(data) {
-  	var table = $('#hover-result').DataTable();
+  	//var table = $('#hover-result').DataTable();
     if (data.organization) {
-      $('#hover-result').removeClass('hover-result-hide');
-      table.search(data.organization).draw();
+      //table.search(data.organization).draw();
+    //  console.log(output);
+      for (var i = 0, len = output.length; i < len; i++) {
+      	if (data.organization === output[i].organization) {
+      		$('#single-income').html('<h4>' + output[i].organization + '</br>$' + output[i].income + '</h4>');
+      	}
+      }
+
     }
   }
 main();
