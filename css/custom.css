@@ -5,10 +5,10 @@ table {
 	padding-left: 10px;
 }
 
-#map { height: 480px; }
-
-#carto-map { height: 500px;
-width: 100%; }
+#carto-map { 
+  height: 500px;
+  width: 100%;
+ }
 
 
 .map-container {
@@ -23,6 +23,7 @@ width: 100%; }
   background: rgba(26,26,26,.7);
   color: white;
   text-align: center;
+  height: 4em;
 }
 
 
