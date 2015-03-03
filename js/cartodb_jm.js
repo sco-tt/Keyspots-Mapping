@@ -35,19 +35,19 @@ function queryJusticeMap (rowData, i) {
 	}).done(function(jmData) {
 		var quntile;
 		if (jmData.income >= 0 && jmData.income < 20260) {
-			quntile = 1;
+			quntile = "1st Quintile";
 		} else
 		if (jmData.income >= 20260 && jmData.income < 38515) {
-			quntile = 2; 
+			quntile = "2nd Quintile";
 		} else
 		if (jmData.income >= 38515 && jmData.income < 62434) {
-			quntile = 3;
+			quntile = "3rd Quintile";
 		} else
 		if (jmData.income >= 62434 && jmData.income < 101577) {
-			quntile = 4;
+			quntile = "4th Quintile";
 		} else
 		if (jmData.income >= 101577) {
-			quntile = 5;
+			quntile = "5th Quintile";
 		} else {
 
 		}
@@ -97,7 +97,7 @@ function writeTable (id, output, sortBoolean) {
 	    $(id).dataTable( {
 	        data: output,
 	        paging: false,        
-	        info:false,
+	        info:true,
 	        sort:sortBoolean,
 	        "columns": [
 	            // CartoDB Data First 
